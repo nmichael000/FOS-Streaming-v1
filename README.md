@@ -18,23 +18,16 @@
 - predefined transcode profiles
 
 
-## Installation (64bit):
-1. `wget https://raw.githubusercontent.com/zgelici/FOS-Streaming-v1/master/install_fos_ubuntu1404_64bit.sh`
-2. `chmod 755 install_fos_ubuntu1404_64bit.sh`
-3. `./install_fos_ubuntu1404_64bit.sh`
-
-
-## Installation (32bit):
-1. `wget https://raw.githubusercontent.com/zgelici/FOS-Streaming-v1/master/install_fos_ubuntu1404_32bit.sh`
-2. `chmod 755 install_fos_ubuntu1404_32bit.sh`
-3. `./install_fos_ubuntu1404_32bit.sh`
-
+## Installation :
+1. curl https://raw.githubusercontent.com/nmichael000/FOS-Streaming-v1/master/install.sh -o /tmp/install.sh
+2. chmod +x /tmp/install.sh
+3. /tmp/install.sh
+4. rm /tmp/install.sh
 
 ### Change port of panel
 1. change port in webinterface -> Settings -> web Port
-2. change port in /home/fos-streaming/fos/nginx/conf/nginx.conf -> listen 8000;
-3. `killall -9 nginx_fos`
-4. `/home/fos-streaming/fos/nginx/sbin/nginx_fos`
+2. change port in /etc/nginx/sites-available/fos-streaming -> listen 8000;
+3. /etc/init.d/nginx restart
 
 ## How can I use it?
 - Default login: admin / admin
@@ -70,8 +63,3 @@ Contribution are always **welcome and recommended**! Here is how:
 ## License
 Fos-Streamining is an open source project by [Tyfix](https://tyfix.nl that is licensed under [MIT](http://opensource.org/licenses/MIT). Tyfix
 reserves the right to change the license of future releases.
-
-
-Donations are **greatly appreciated!**
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif "Tyfix ")](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ATJFKYPFY65W "Donate")
