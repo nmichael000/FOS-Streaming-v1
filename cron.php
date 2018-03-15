@@ -21,7 +21,7 @@ foreach (Stream::where('pid', '!=', 0)->where('running', '=', 1)->get() as $stre
             $stream->running = 1;
             $stream->status = 2;
             shell_exec("kill -9 " . $stream->pid);
-            shell_exec("/bin/rm -r /home/fos-streaming/fos/www/" . $setting->hlsfolder . "/" . $stream->id . "*");
+            shell_exec("/bin/rm -r " . $setting->hlsfolder . "/" . $stream->id . "*");
 
             if ($stream->streamurl2) {
                 $stream->checker = 2;
@@ -38,7 +38,7 @@ foreach (Stream::where('pid', '!=', 0)->where('running', '=', 1)->get() as $stre
                     $stream->running = 1;
                     $stream->status = 2;
                     shell_exec("kill -9 " . $stream->pid);
-                    shell_exec("/bin/rm -r /home/fos-streaming/fos/www/" . $setting->hlsfolder . "/" . $stream->id . "*");
+                    shell_exec("/bin/rm -r " . $setting->hlsfolder . "/" . $stream->id . "*");
                     if ($stream->streamurl3) {
                         $stream->checker = 3;
                         $checkstreamurl = shell_exec('/usr/bin/timeout 15s ' . $setting->ffprobe_path . ' -analyzeduration 10000000 -probesize 9000000 -i "' . $stream->streamurl3 . '" -v  quiet -print_format json -show_streams 2>&1');

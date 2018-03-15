@@ -44,7 +44,7 @@ function stop_stream($id)
 
     if (checkPid($stream->pid)) {
         shell_exec("kill -9 " . $stream->pid);
-        shell_exec("/bin/rm -r /home/fos-streaming/fos/www/" . $setting->hlsfolder . "/" . $stream->id . "*");
+        shell_exec("/bin/rm -r " . $setting->hlsfolder . "/" . $stream->id . "*");
     }
     $stream->pid = "";
     $stream->running = 0;
@@ -71,13 +71,13 @@ function getTranscode($id, $streamnumber = null)
     $endofffmpeg = "";
     $endofffmpeg .= $stream->bitstreamfilter ? ' -bsf h264_mp4toannexb' : '';
     $endofffmpeg .= ' -hls_flags delete_segments -hls_time 10';
-    $endofffmpeg .= ' -hls_list_size 8 /home/fos-streaming/fos/www/' . $setting->hlsfolder . '/' . $stream->id . '_.m3u8  > /dev/null 2>/dev/null & echo $! ';
+    $endofffmpeg .= ' -hls_list_size 8 ' . $setting->hlsfolder . '/' . $stream->id . '_.m3u8  > /dev/null 2>/dev/null & echo $! ';
     if ($trans) {
         $ffmpeg .= ' -y';
+        $ffmpeg .= ' -user-agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '"';
         $ffmpeg .= ' -probesize ' . ($trans->probesize ? $trans->probesize : '15000000');
         $ffmpeg .= ' -analyzeduration ' . ($trans->analyzeduration ? $trans->analyzeduration : '12000000');
         $ffmpeg .= ' -i ' . '"' . "$url" . '"';
-        $ffmpeg .= ' -user_agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '"';
         $ffmpeg .= ' -strict -2 -dn ';
         $ffmpeg .= $trans->scale ? ' -vf scale=' . ($trans->scale ? $trans->scale : '') : '';
         $ffmpeg .= $trans->audio_codec ? ' -acodec ' . $trans->audio_codec : '';
@@ -102,8 +102,8 @@ function getTranscode($id, $streamnumber = null)
         return $ffmpeg;
     }
 
+    $ffmpeg .= ' -user-agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '"';
     $ffmpeg .= ' -probesize 15000000 -analyzeduration 9000000 -i "' . $url . '"';
-    $ffmpeg .= ' -user_agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '"';
     $ffmpeg .= ' -c copy -c:a aac -b:a 128k';
     $ffmpeg .= $endofffmpeg;
     return $ffmpeg;
@@ -115,10 +115,10 @@ function getTranscodedata($id)
     $setting = Setting::first();
     $ffmpeg = "ffmpeg";
     $ffmpeg .= ' -y';
+    $ffmpeg .= ' -user-agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '"';
     $ffmpeg .= ' -probesize ' . ($trans->probesize ? $trans->probesize : '15000000');
     $ffmpeg .= ' -analyzeduration ' . ($trans->analyzeduration ? $trans->analyzeduration : '12000000');
     $ffmpeg .= ' -i ' . '"' . "[input]" . '"';
-    $ffmpeg .= ' -user_agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '"';
     $ffmpeg .= ' -strict -2 -dn ';
     $ffmpeg .= $trans->scale ? ' -vf scale=' . ($trans->scale ? $trans->scale : '') : '';
     $ffmpeg .= $trans->audio_codec ? ' -acodec ' . $trans->audio_codec : '';
@@ -153,7 +153,7 @@ function start_stream($id)
         $stream->status = 1;
     } else {
         $stream->checker = 0;
-        $checkstreamurl = shell_exec('' . $setting->ffprobe_path . ' -analyzeduration 1000000 -probesize 9000000 -i "' . $stream->streamurl . '" -v  quiet -print_format json -show_streams 2>&1');
+        $checkstreamurl = shell_exec('' . $setting->ffprobe_path . ' -user-agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '" -analyzeduration 1000000 -probesize 9000000 -i "' . $stream->streamurl . '" -v  quiet -print_format json -show_streams 2>&1');
         $streaminfo = json_decode($checkstreamurl, true);
         if ($streaminfo) {
             $pid = shell_exec(getTranscode($stream->id));
@@ -180,13 +180,13 @@ function start_stream($id)
             $stream->status = 2;
             if (checkPid($stream->pid)) {
                 shell_exec("kill -9 " . $stream->pid);
-                shell_exec("/bin/rm -r /home/fos-streaming/fos/www/" . $setting->hlsfolder . "/" . $stream->id . "*");
+                shell_exec("/bin/rm -r " . $setting->hlsfolder . "/" . $stream->id . "*");
             }
 
             if ($stream->streamurl2) {
                 $stream->checker = 2;
 
-                $checkstreamurl = shell_exec('' . $setting->ffprobe_path . ' -analyzeduration 1000000 -probesize 9000000 -i "' . $stream->streamurl . '" -v  quiet -print_format json -show_streams 2>&1');
+                $checkstreamurl = shell_exec('' . $setting->ffprobe_path . ' -user-agent "' . ($setting->user_agent ? $setting->user_agent : 'FOS-Streaming') . '" -analyzeduration 1000000 -probesize 9000000 -i "' . $stream->streamurl . '" -v  quiet -print_format json -show_streams 2>&1');
                 $streaminfo = json_decode($checkstreamurl, true);
 
                 if ($streaminfo) {
@@ -213,7 +213,7 @@ function start_stream($id)
                     $stream->status = 2;
                     if (checkPid($stream->pid)) {
                         shell_exec("kill -9 " . $stream->pid);
-                        shell_exec("/bin/rm -r /home/fos-streaming/fos/www/" . $setting->hlsfolder . "/" . $stream->id . "*");
+                        shell_exec("/bin/rm -r " . $setting->hlsfolder . "/" . $stream->id . "*");
                     }
                     if ($stream->streamurl3) {
                         $stream->checker = 3;
