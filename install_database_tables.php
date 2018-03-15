@@ -78,12 +78,12 @@ if (isset($_GET['install'])) {
 
         $db->schema()->create('settings', function ($table) {
             $table->increments('id');
-            $table->string('ffmpeg_path')->default('/usr/local/bin/ffmpeg');
-            $table->string('ffprobe_path')->default('/usr/local/bin/ffprobe');
+            $table->string('ffmpeg_path')->default('/usr/bin/ffmpeg');
+            $table->string('ffprobe_path')->default('/usr/bin/ffprobe');
             $table->string('webport')->default('8000');
             $table->string('webip');
             $table->string('logourl');
-            $table->string('hlsfolder')->default('hl');
+            $table->string('hlsfolder')->default('/var/www/html/fos-streaming/hls');
             $table->string('user_agent')->default('FOS-Streaming');
             $table->timestamps();
         });
