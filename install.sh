@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export DEBIAN_FRONTEND=noninteractive
 which aptitude > /dev/null
 if [ $? -eq 0 ]
@@ -24,7 +26,7 @@ chown www-data: /var/www/.composer/
 chown -R www-data: /var/www/html/fos-streaming
 su - www-data -c "composer install -d /var/www/html/fos-streaming" --shell=/bin/bash
 sed -i -e 's/xxx/fosstreaming/g' -e 's/ttt/fosstreaming/g' -e 's/zzz/fosstreaming/g' /var/www/html/fos-streaming/config.php
-cp -p /var/www/html/fos-streaming/fos-streaming.nginx /etc/nginx/sites-available/fos-streaming
+cp -p /var/www/html/fos-streaming/config/fos-streaming.nginx /etc/nginx/sites-available/fos-streaming
 ln -s /etc/nginx/sites-available/fos-streaming /etc/nginx/sites-enabled/
 /etc/init.d/nginx restart
 curl "http://127.0.0.1:8000/install_database_tables.php?install"
