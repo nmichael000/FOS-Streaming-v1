@@ -1,5 +1,6 @@
 <?php
 include('config.php');
+logincheck();
 // TODO: version control
 // TODO: update tables
 
@@ -83,7 +84,7 @@ if (isset($_GET['install'])) {
             $table->string('webport')->default('8000');
             $table->string('webip');
             $table->string('logourl');
-            $table->string('hlsfolder')->default('/var/www/html/fos-streaming/hls');
+            $table->string('hlsfolder')->default('yyy');
             $table->string('user_agent')->default('FOS-Streaming');
             $table->timestamps();
         });
